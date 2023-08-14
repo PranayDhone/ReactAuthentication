@@ -9,6 +9,7 @@ const MainNavigation = () => {
 
   const isLoggedIn = authCtx.isLoggedIn;
 
+  //logoutHandler>>> logout button pe click karenge tab main page me user ko le jayega!
   const logoutHandler = () => {
     authCtx.logout();
   };
@@ -33,7 +34,7 @@ const MainNavigation = () => {
 
           {isLoggedIn && (
             <li>
-              <button>Logout</button>
+              <button onClick={logoutHandler}>Logout</button>
             </li>
           )}
         </ul>
