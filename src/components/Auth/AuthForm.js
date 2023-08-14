@@ -1,9 +1,10 @@
 import { useState, useRef, useContext } from "react";
-
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
+  const Navigate = useNavigate();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -29,17 +30,17 @@ const AuthForm = () => {
     } else {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBmNIsWtO9zU2AbLgHBoaOJJbsYK4WaLHQ";
-    } /////////........
+    }
     fetch(url, {
       method: "POST",
       body: JSON.stringify({
         email: enteredEmail,
-        passwod: enteredPassword,
+        password: enteredPassword,
         returnSecureToken: true,
       }),
 
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
     })
       .then((res) => {
@@ -58,7 +59,12 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        authCtx.login(data.idToken);
+        const expirationTime = new Date(
+          new Date().getTime() + +data.expiresIn * 1000
+        );
+        authCtx.login(data.idToken, expirationTime.toISOString());
+        //Navigate.replace("/");
+        Navigate("/");
       })
       .catch((err) => {
         alert(err.message);
